@@ -2,7 +2,7 @@
 
 <oaf_server iid="OAFIID:GNOME_DebianWeatherApplet_Factory"
             type="exe"
-            location="applet.py">
+            location="debweather.py">
 
         <oaf_attribute name="repo_ids" type="stringv">
                 <item value="IDL:Bonobo/GenericFactory:1.0"/>
