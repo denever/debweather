@@ -100,16 +100,15 @@ class WeatherIcon(gtk.Label):
         logging.info(self.broken)
         logging.info(self.url)
 
-        if self.weather == '1':
-            self.set_clear()
-        if self.weather == '2':
-            self.set_few_clouds()
-        if self.weather == '3':
-            self.set_overcast()
-        if self.weather == '4':
-            self.set_shower()
-        if self.weather == '5':
-            self.set_storm()
+        weather_select = { '1': self.set_clear,
+                           '2': self.set_few_clouds,
+                           '3': self.set_overcast,
+                           '4': self.set_shower,
+                           '5': self.set_storm}
+
+        weather_select[self.weather]()
+
+        logging.info(self.get_label())
 
         return True
 
