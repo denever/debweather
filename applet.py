@@ -41,33 +41,42 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='w')
 
 class WeatherIcon(gtk.Label):
-    description = 'unknown'
-    total = 'unknown'
-    broken = 'unknown'
-    url = 'unknown'
-    weather = 0
-
     def __init__(self, distro, arch):
+        gtk.Label.__init__(self, "")
         self.weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (distro, arch)
+        self.description = 'unknown'
+        self.total = 'unknown'
+        self.broken = 'unknown'
+        self.url = 'unknown'
+        self.weather = 0
+        self.weather_select = { '1': self.set_clear,
+                           '2': self.set_few_clouds,
+                           '3': self.set_overcast,
+                           '4': self.set_shower,
+                           '5': self.set_storm}
 
     def set_clear(self):
-        self.set_label("Debian Weather: Clear")
+        self.set_text("Debian Weather: Clear")
 
     def set_few_clouds(self):
-        self.set_label("Debian Weather: Few clouds")
+        self.set_text("Debian Weather: Few clouds")
 
     def set_overcast(self):
-        self.set_label("Debian Weather: Overcast")
+        self.set_text("Debian Weather: Overcast")
 
     def set_shower(self):
-        self.set_label("Debian Weather: Shower scattered")
+        self.set_text("Debian Weather: Shower scattered")
 
     def set_storm(self):
-        self.set_label("Debian Weather: Storm")
-        
+        logging.info("storm")
+        self.set_text("Debian Weather: Storm")
+
     def update(self):
         logging.info("Calling weather update")
         logging.info(self.weather_url)
+        self.weather = '1'
+        self.weather_select[self.weather]()
+        return True
 
         # data = str()
         # try:
@@ -86,43 +95,44 @@ class WeatherIcon(gtk.Label):
         # try:
         #     weather_xml = XML(data)
         #     self.description = weather_xml.getiterator("description")[0].text
-        #     self.weather = weather_xml.getiterator("index")[0].text            
+        #     self.weather = weather_xml.getiterator("index")[0].text
         #     self.total = weather_xml.getiterator('total')[0].text
         #     self.broken = weather_xml.getiterator('broken')[0].text
         #     self.url = weather_xml.getiterator('url')[0].text
         # except e:
         #     logging.error(str(e))
-        self.weather = '1'
+        # self.weather = '1'
 
-        logging.info(self.description)
-        logging.info(self.weather)
-        logging.info(self.total)
-        logging.info(self.broken)
-        logging.info(self.url)
+        # logging.info(self.description)
+        # logging.info(self.weather)
+        # logging.info(self.total)
+        # logging.info(self.broken)
+        # logging.info(self.url)
 
-        weather_select = { '1': self.set_clear,
-                           '2': self.set_few_clouds,
-                           '3': self.set_overcast,
-                           '4': self.set_shower,
-                           '5': self.set_storm}
+        # weather_select = { '1': self.set_clear,
+        #                    '2': self.set_few_clouds,
+        #                    '3': self.set_overcast,
+        #                    '4': self.set_shower,
+        #                    '5': self.set_storm}
 
-        weather_select[self.weather]()
+        # weather_select[self.weather]()
 
-        logging.info(self.get_label())
-
-        return True
+#        logging.info(self.get_label())
 
 def background_show(applet):
     logging.info("background: %s" % applet.get_background())
 
 def sample_factory(applet, iid):
     logging.info("Creating new applet instance")
-    weathericon = WeatherIcon('unstable','i386')
-    weathericon.set_storm()
-    applet.add(weathericon)
+    wi = WeatherIcon('unstable','i386')
+    logging.info("wi created")
+    wi.set_storm()
+    logging.info("wi stormed")
+    applet.add(wi)
     applet.show_all()
     gobject.timeout_add(1000, background_show, applet)
-    gobject.timeout_add_seconds(5, weathericon.update)
+    gobject.timeout_add_seconds(5, wi.update)
+    logging.info("Returning true")
     return True
 
 print "Starting factory"
