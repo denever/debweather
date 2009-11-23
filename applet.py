@@ -32,6 +32,8 @@ import gnomeapplet
 import gobject
 import httplib
 import logging
+import sys
+import os.path
 from xml.etree.ElementTree import XML
 
 logging.basicConfig(level=logging.DEBUG,
@@ -40,9 +42,28 @@ logging.basicConfig(level=logging.DEBUG,
                     filename='/home/denever/applet.log',
                     filemode='w')
 
-class WeatherIcon(gtk.Label):
+class Config:
+    def __init__(self, mainfile):
+        self.APP_PATH = os.path.dirname(mainfile)
+        if self.APP_PATH == '/usr/bin':
+            self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/pydebweather')
+        else:
+            self.DATA_PATH=os.path.join(self.APP_PATH, 'data/')
+        logging.info("self.DATA_PATH: %s" % self.DATA_PATH)
+            
+    def get_app_path(self):
+        return self.APP_PATH
+
+    def get_data_path(self):
+        return self.DATA_PATH
+
+    def get_in_data_path(self, file):
+        return os.path.join(self.DATA_PATH,file)
+
+class WeatherIcon(gtk.Image):
     def __init__(self, distro, arch):
-        gtk.Label.__init__(self, "")
+        gtk.Image.__init__(self)
+        self.config = Config(__file__)
         self.weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (distro, arch)
         self.description = 'unknown'
         self.total = 'unknown'
@@ -56,20 +77,26 @@ class WeatherIcon(gtk.Label):
                            '5': self.set_storm}
 
     def set_clear(self):
-        self.set_text("Debian Weather: Clear")
+        logging.info("setting image file: %s" % self.config.get_in_data_path('clear.png'))
+        self.set_from_file(self.config.get_in_data_path('clear.png'))
+        self.set_tooltip_text("Debian Weather: Clear")
 
     def set_few_clouds(self):
-        self.set_text("Debian Weather: Few clouds")
+        self.set_from_file(self.config.get_in_data_path('few-clouds.png'))
+        self.set_tooltip_text("Debian Weather: Few clouds")
 
     def set_overcast(self):
-        self.set_text("Debian Weather: Overcast")
+        self.set_from_file(self.config.get_in_data_path('overcast.png'))
+        self.set_tooltip_text("Debian Weather: Overcast")
 
     def set_shower(self):
-        self.set_text("Debian Weather: Shower scattered")
+        self.set_from_file(self.config.get_in_data_path('shower.png'))
+        self.set_tooltip_text("Debian Weather: Shower scattered")
 
     def set_storm(self):
-        logging.info("storm")
-        self.set_text("Debian Weather: Storm")
+        logging.info(self.config.get_in_data_path('storm.png'))
+        self.set_from_file(self.config.get_in_data_path('storm.png'))
+        self.set_tooltip_text("Debian Weather: Storm")
 
     def update(self):
         logging.info("Calling weather update")
@@ -116,8 +143,6 @@ class WeatherIcon(gtk.Label):
         #                    '5': self.set_storm}
 
         # weather_select[self.weather]()
-
-#        logging.info(self.get_label())
 
 def background_show(applet):
     logging.info("background: %s" % applet.get_background())
