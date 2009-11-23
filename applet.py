@@ -69,7 +69,7 @@ class WeatherIcon(gtk.Label):
         logging.info("Calling weather update")
         logging.info(self.weather_url)
 
-        data = str()
+        # data = str()
         # try:
         #     logging.info("Connecting to edos.debian.net...")
         #     conn = httplib.HTTPConnection("edos.debian.net")
