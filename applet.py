@@ -166,7 +166,7 @@ def sample_factory(applet, iid):
     return True
 
 print "Starting factory"
-gnomeapplet.bonobo_factory("OAFIID:GNOME_PythonAppletSample_Factory",
+gnomeapplet.bonobo_factory("OAFIID:GNOME_DebianWeatherApplet_Factory",
                            gnomeapplet.Applet.__gtype__,
                            "hello", "0", sample_factory)
 print "Factory ended"
