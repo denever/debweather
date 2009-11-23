@@ -111,6 +111,8 @@ class WeatherIcon(gtk.Label):
         if self.weather == '5':
             self.set_storm()
 
+        return True
+
 def background_show(applet):
     logging.info("background: %s" % applet.get_background())
 
@@ -121,7 +123,7 @@ def sample_factory(applet, iid):
     applet.add(weathericon)
     applet.show_all()
     gobject.timeout_add(1000, background_show, applet)
-    gobject.timeout_add(3600000, weathericon.update)
+    gobject.timeout_add_seconds(5, weathericon.update)
     return True
 
 print "Starting factory"
