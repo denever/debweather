@@ -50,7 +50,7 @@ class Config:
         else:
             self.DATA_PATH=os.path.join(self.APP_PATH, 'data/')
         logging.info("self.DATA_PATH: %s" % self.DATA_PATH)
-            
+
     def get_app_path(self):
         return self.APP_PATH
 
@@ -77,26 +77,31 @@ class WeatherIcon(gtk.Image):
                            '5': self.set_storm}
 
     def set_clear(self):
-        logging.info("setting image file: %s" % self.config.get_in_data_path('clear.png'))
-        self.set_from_file(self.config.get_in_data_path('clear.png'))
+        self.set_imageicon('clear.png')
         self.set_tooltip_text("Debian Weather: Clear")
 
     def set_few_clouds(self):
-        self.set_from_file(self.config.get_in_data_path('few-clouds.png'))
+        self.set_imageicon('few-clouds.png')
         self.set_tooltip_text("Debian Weather: Few clouds")
 
     def set_overcast(self):
-        self.set_from_file(self.config.get_in_data_path('overcast.png'))
+        self.set_imageicon('overcast.png')
         self.set_tooltip_text("Debian Weather: Overcast")
 
     def set_shower(self):
-        self.set_from_file(self.config.get_in_data_path('shower.png'))
+        self.set_imageicon('shower.png')
         self.set_tooltip_text("Debian Weather: Shower scattered")
 
     def set_storm(self):
-        logging.info(self.config.get_in_data_path('storm.png'))
-        self.set_from_file(self.config.get_in_data_path('storm.png'))
+        self.set_imageicon('storm.png')
         self.set_tooltip_text("Debian Weather: Storm")
+        
+    def set_imageicon(self, pngname):
+        filename = self.config.get_in_data_path(pngname)
+        temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, 32, 32)
+        logging.info("setting image file: %s" % filename)
+        self.set_from_pixbuf(temp)
+
 
     def update(self):
         logging.info("Calling weather update")
