@@ -75,6 +75,9 @@ class WeatherIcon(gtk.Image):
                            '3': self.set_overcast,
                            '4': self.set_shower,
                            '5': self.set_storm}
+    def set_unavailable(self):
+        self.set_imageicon('pydebweather.png')
+        self.set_tooltip_text('Service unavailable')
 
     def set_clear(self):
         self.set_imageicon('clear.png')
@@ -102,52 +105,44 @@ class WeatherIcon(gtk.Image):
         logging.info("setting image file: %s" % filename)
         self.set_from_pixbuf(temp)
 
-
     def update(self):
         logging.info("Calling weather update")
         logging.info(self.weather_url)
-        self.weather = '1'
-        self.weather_select[self.weather]()
-        return True
+        
+        data = str()
+        try:
+            logging.info("Connecting to edos.debian.net...")
+            conn = httplib.HTTPConnection("edos.debian.net")
+            logging.info("Getting weather_url...")
+            conn.request("GET", self.weather_url)
+            logging.info("Getting response...")
+            r1 = conn.getresponse()
+            logging.info(str(r1))
+            data = r1.read()
+            logging.info(data)
+        except e:
+            logging.error(str(e))
+            self.set_unavailable()
 
-        # data = str()
-        # try:
-        #     logging.info("Connecting to edos.debian.net...")
-        #     conn = httplib.HTTPConnection("edos.debian.net")
-        #     logging.info("Getting weather_url...")
-        #     conn.request("GET", self.weather_url)
-        #     logging.info("Getting response...")
-        #     r1 = conn.getresponse()
-        #     logging.info(str(r1))
-        #     data = r1.read()
-        #     logging.info(data)
-        # except e:
-        #     logging.error(str(e))
-
-        # try:
-        #     weather_xml = XML(data)
-        #     self.description = weather_xml.getiterator("description")[0].text
-        #     self.weather = weather_xml.getiterator("index")[0].text
-        #     self.total = weather_xml.getiterator('total')[0].text
-        #     self.broken = weather_xml.getiterator('broken')[0].text
-        #     self.url = weather_xml.getiterator('url')[0].text
-        # except e:
-        #     logging.error(str(e))
-        # self.weather = '1'
+        try:
+            weather_xml = XML(data)
+            self.description = weather_xml.getiterator("description")[0].text
+            self.weather = weather_xml.getiterator("index")[0].text
+            self.total = weather_xml.getiterator('total')[0].text
+            self.broken = weather_xml.getiterator('broken')[0].text
+            self.url = weather_xml.getiterator('url')[0].text
+        except e:
+            logging.error(str(e))
+            self.set_unavailable()
 
         # logging.info(self.description)
         # logging.info(self.weather)
         # logging.info(self.total)
         # logging.info(self.broken)
         # logging.info(self.url)
+        self.weather_select[self.weather]()
 
-        # weather_select = { '1': self.set_clear,
-        #                    '2': self.set_few_clouds,
-        #                    '3': self.set_overcast,
-        #                    '4': self.set_shower,
-        #                    '5': self.set_storm}
-
-        # weather_select[self.weather]()
+        return True
 
 def background_show(applet):
     logging.info("background: %s" % applet.get_background())
@@ -156,7 +151,7 @@ def sample_factory(applet, iid):
     logging.info("Creating new applet instance")
     wi = WeatherIcon('unstable','i386')
     logging.info("wi created")
-    wi.set_storm()
+    wi.set_unavailable()
     logging.info("wi stormed")
     applet.add(wi)
     applet.show_all()
