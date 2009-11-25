@@ -74,9 +74,10 @@ class Config:
         return os.path.join(self.DATA_PATH,file)
 
 class WeatherIcon(gtk.Image):
-    def __init__(self, distro, arch):
+    def __init__(self, size, distro, arch):
         gtk.Image.__init__(self)
         self.config = Config(__file__)
+        self.icon_size = size
         self.weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (distro, arch)
         self.description = 'unknown'
         self.total = 'unknown'
@@ -113,9 +114,12 @@ class WeatherIcon(gtk.Image):
         self.set_imageicon('storm.png')
         self.set_tooltip_text("Debian Weather: Storm")
 
+    def set_icon_size(self, size):
+        self.icon_size = size
+
     def set_imageicon(self, pngname):
         filename = self.config.get_in_pix_path(pngname)
-        temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, 32, 32)
+        temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, self.icon_size, self.icon_size)
         logging.debug("setting image file: %s" % filename)
         self.set_from_pixbuf(temp)
 
@@ -191,12 +195,10 @@ def create_menu(applet, verbs):
 
 def sample_factory(applet, iid):
     logging.debug("Creating new applet instance")
-    wi = WeatherIcon('unstable','i386')
-    logging.debug("wi created")
-    wi.update()
-    logging.debug("wi updated")
+    wi = WeatherIcon(applet.get_size(), 'unstable','i386')
     applet.add(wi)
     applet.show_all()
+    wi.update()
     verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs)]
     create_menu(applet, verbs)
     gobject.timeout_add(1000, background_show, applet)
