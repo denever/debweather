@@ -156,15 +156,9 @@ def background_show(applet):
 def create_menu(applet, verbs):
     menu_xml = """
 <popup name="button3">
-<menuitem name="ItemPreferences"
-	  verb="Preferences"
-	  pixtype="stock"
-	  pixname="gtk-preferences"/>
+<menuitem name="Item 1" verb="Prefs" _label="_Preferences" pixtype="stock" pixname="gtk-preferences"/>
 <separator/>
-<menuitem name="ItemAbout"
-	  verb="About"
-	  pixtype="stock"
-	  pixname="gtk-about"/>
+<menuitem name="Item 2" verb="About" _label="_About" pixtype="stock" pixname="gtk-about"/>
 </popup>"""
     applet.setup_menu(menu_xml, verbs, None)
 
@@ -176,7 +170,7 @@ def sample_factory(applet, iid):
     logging.info("wi stormed")
     applet.add(wi)
     applet.show_all()
-    verbs = [('About', wi.show_about), ('Preferences', wi.show_preferences)]
+    verbs = [('About', wi.show_about), ('Prefs', wi.show_preferences)]
     create_menu(applet, verbs)
     gobject.timeout_add(1000, background_show, applet)
     gobject.timeout_add_seconds(60, wi.update)
