@@ -98,7 +98,7 @@ class WeatherIcon(gtk.Image):
     def set_storm(self):
         self.set_imageicon('storm.png')
         self.set_tooltip_text("Debian Weather: Storm")
-        
+
     def set_imageicon(self, pngname):
         filename = self.config.get_in_data_path(pngname)
         temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, 32, 32)
@@ -108,7 +108,7 @@ class WeatherIcon(gtk.Image):
     def update(self):
         logging.info("Calling weather update")
         logging.info(self.weather_url)
-        
+
         data = str()
         try:
             logging.info("Connecting to edos.debian.net...")
@@ -144,10 +144,22 @@ class WeatherIcon(gtk.Image):
 
         return True
 
-    def show_about(self):
+    def show_about(self, obj, label, *data):
         logging.info("Show about")
-        
-    def show_preferences(self):
+        dlg_about = gtk.AboutDialog()
+        dlg_about.set_program_name('pydebweather')
+        dlg_about.set_name('Python Debian Weather Applet')
+        dlg_about.set_comments('A panel application for monitoring Debian weather conditions')
+        dlg_about.set_version('1.0')
+        dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
+        dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
+        dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
+        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_data_path('pydebweather.png'))
+        dlg_about.set_logo(logo)
+        dlg_about.run()
+        dlg_about.destroy()
+
+    def show_prefs(self, obj, label, *data):
         logging.info("Show preferences")
 
 def background_show(applet):
@@ -170,7 +182,7 @@ def sample_factory(applet, iid):
     logging.info("wi stormed")
     applet.add(wi)
     applet.show_all()
-    verbs = [('About', wi.show_about), ('Prefs', wi.show_preferences)]
+    verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs)]
     create_menu(applet, verbs)
     gobject.timeout_add(1000, background_show, applet)
     gobject.timeout_add_seconds(60, wi.update)
