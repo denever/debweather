@@ -3,7 +3,7 @@
 ###########################################################################
 #                        Python Debian Weather                            #
 #                        --------------------                             #
-#  copyright         (C) 2008  Giuseppe "denever" Martino                 #
+#  copyright         (C) 2008-2009 Giuseppe "denever" Martino             #
 #  email                : denever@users.sf.net                            #
 ###########################################################################
 ###########################################################################
@@ -46,18 +46,31 @@ class Config:
     def __init__(self, mainfile):
         self.APP_PATH = os.path.dirname(mainfile)
         if self.APP_PATH == '/usr/bin':
-            self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/pydebweather')
+            self.PIX_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/pydebweather')
+            self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pydebweather')
         else:
+            self.PIX_PATH=os.path.join(self.APP_PATH, 'data/')
             self.DATA_PATH=os.path.join(self.APP_PATH, 'data/')
-        logging.info("self.DATA_PATH: %s" % self.DATA_PATH)
+        logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
+        logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
 
     def get_app_path(self):
         return self.APP_PATH
+    
+    def get_pix_path(self):
+        logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
+        return self.PIX_PATH
 
+    def get_in_pix_path(self, file):
+        logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
+        return os.path.join(self.PIX_PATH,file)
+    
     def get_data_path(self):
+        logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return self.DATA_PATH
 
     def get_in_data_path(self, file):
+        logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return os.path.join(self.DATA_PATH,file)
 
 class WeatherIcon(gtk.Image):
@@ -75,6 +88,7 @@ class WeatherIcon(gtk.Image):
                            '3': self.set_overcast,
                            '4': self.set_shower,
                            '5': self.set_storm}
+
     def set_unavailable(self):
         self.set_imageicon('pydebweather.png')
         self.set_tooltip_text('Service unavailable')
@@ -100,26 +114,26 @@ class WeatherIcon(gtk.Image):
         self.set_tooltip_text("Debian Weather: Storm")
 
     def set_imageicon(self, pngname):
-        filename = self.config.get_in_data_path(pngname)
+        filename = self.config.get_in_pix_path(pngname)
         temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, 32, 32)
-        logging.info("setting image file: %s" % filename)
+        logging.debug("setting image file: %s" % filename)
         self.set_from_pixbuf(temp)
 
     def update(self):
-        logging.info("Calling weather update")
-        logging.info(self.weather_url)
+        logging.debug("Calling weather update")
+        logging.debug(self.weather_url)
 
         data = str()
         try:
-            logging.info("Connecting to edos.debian.net...")
+            logging.debug("Connecting to edos.debian.net...")
             conn = httplib.HTTPConnection("edos.debian.net")
-            logging.info("Getting weather_url...")
+            logging.debug("Getting weather_url...")
             conn.request("GET", self.weather_url)
-            logging.info("Getting response...")
+            logging.debug("Getting response...")
             r1 = conn.getresponse()
-            logging.info(str(r1))
+            logging.debug(str(r1))
             data = r1.read()
-            logging.info(data)
+            logging.debug(data)
         except e:
             logging.error(str(e))
             self.set_unavailable()
@@ -135,17 +149,17 @@ class WeatherIcon(gtk.Image):
             logging.error(str(e))
             self.set_unavailable()
 
-        # logging.info(self.description)
-        # logging.info(self.weather)
-        # logging.info(self.total)
-        # logging.info(self.broken)
-        # logging.info(self.url)
+        # logging.debug(self.description)
+        # logging.debug(self.weather)
+        # logging.debug(self.total)
+        # logging.debug(self.broken)
+        # logging.debug(self.url)
         self.weather_select[self.weather]()
 
         return True
 
     def show_about(self, obj, label, *data):
-        logging.info("Show about")
+        logging.debug("Show about")
         dlg_about = gtk.AboutDialog()
         dlg_about.set_program_name('pydebweather')
         dlg_about.set_name('Python Debian Weather Applet')
@@ -154,18 +168,19 @@ class WeatherIcon(gtk.Image):
         dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
         dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
         dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
-        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_data_path('pydebweather.png'))
+        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_pix_path('pydebweather.png'))
         dlg_about.set_logo(logo)
         dlg_about.run()
         dlg_about.destroy()
 
     def show_prefs(self, obj, label, *data):
-        logging.info("Show preferences")
+        logging.debug("Show preferences")
 
 def background_show(applet):
-    logging.info("background: %s" % applet.get_background())
+    logging.debug("background: %s" % applet.get_background())
 
 def create_menu(applet, verbs):
+    logging.debug("create_menu")
     menu_xml = """
 <popup name="button3">
 <menuitem name="Item 1" verb="Prefs" _label="_Preferences" pixtype="stock" pixname="gtk-preferences"/>
@@ -175,18 +190,18 @@ def create_menu(applet, verbs):
     applet.setup_menu(menu_xml, verbs, None)
 
 def sample_factory(applet, iid):
-    logging.info("Creating new applet instance")
+    logging.debug("Creating new applet instance")
     wi = WeatherIcon('unstable','i386')
-    logging.info("wi created")
+    logging.debug("wi created")
     wi.update()
-    logging.info("wi stormed")
+    logging.debug("wi updated")
     applet.add(wi)
     applet.show_all()
     verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs)]
     create_menu(applet, verbs)
     gobject.timeout_add(1000, background_show, applet)
     gobject.timeout_add_seconds(60, wi.update)
-    logging.info("Returning true")
+    logging.debug("Returning true")
     return True
 
 print "Starting factory"
