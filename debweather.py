@@ -144,19 +144,42 @@ class WeatherIcon(gtk.Image):
 
         return True
 
+    def show_about(self):
+        logging.info("Show about")
+        
+    def show_preferences(self):
+        logging.info("Show preferences")
+
 def background_show(applet):
     logging.info("background: %s" % applet.get_background())
+
+def create_menu(applet, verbs):
+    menu_xml = """
+<popup name="button3">
+<menuitem name="ItemPreferences"
+	  verb="Preferences"
+	  pixtype="stock"
+	  pixname="gtk-preferences"/>
+<separator/>
+<menuitem name="ItemAbout"
+	  verb="About"
+	  pixtype="stock"
+	  pixname="gtk-about"/>
+</popup>"""
+    applet.setup_menu(menu_xml, verbs, None)
 
 def sample_factory(applet, iid):
     logging.info("Creating new applet instance")
     wi = WeatherIcon('unstable','i386')
     logging.info("wi created")
-    wi.set_unavailable()
+    wi.update()
     logging.info("wi stormed")
     applet.add(wi)
     applet.show_all()
+    verbs = [('About', wi.show_about), ('Preferences', wi.show_preferences)]
+    create_menu(applet, verbs)
     gobject.timeout_add(1000, background_show, applet)
-    gobject.timeout_add_seconds(5, wi.update)
+    gobject.timeout_add_seconds(60, wi.update)
     logging.info("Returning true")
     return True
 
@@ -165,3 +188,4 @@ gnomeapplet.bonobo_factory("OAFIID:GNOME_DebianWeatherApplet_Factory",
                            gnomeapplet.Applet.__gtype__,
                            "hello", "0", sample_factory)
 print "Factory ended"
+# pydebweather.png in /usr/share/pixmaps
