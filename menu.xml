@@ -1,0 +1,11 @@
+<popup name="button3">
+<menuitem name="ItemPreferences"
+	  verb="Preferences"
+	  pixtype="stock"
+	  pixname="gtk-preferences"/>
+<separator/>
+<menuitem name="ItemAbout"
+	  verb="About"
+	  pixtype="stock"
+	  pixname="gtk-about"/>
+</popup>
