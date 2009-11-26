@@ -38,7 +38,6 @@ import gnomeapplet
 import gobject
 
 from debweatherlib import Paths
-from debweatherlib import PreferencesBox
 from debweatherlib import WeatherIcon
 
 globalpaths = Paths(__file__)
