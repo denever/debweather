@@ -4,6 +4,7 @@ import logging
 class Paths:
     def __init__(self, mainfile):
         self.APP_PATH = os.path.dirname(mainfile)
+        logging.debug("self.APP_PATH: %s" % self.APP_PATH)        
         if self.APP_PATH == '/usr/bin':
             self.PIX_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/pydebweather')
             self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pydebweather')
