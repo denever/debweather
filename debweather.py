@@ -72,12 +72,12 @@ class Config:
         logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return os.path.join(self.DATA_PATH,file)
 
+globalconfig = Config(__file__)
 
 class WeatherIcon(gtk.Image):
     def __init__(self, size, distro, arch):
         logging.debug("WeatherIcon.__init__")
         gtk.Image.__init__(self)
-        self.config = Config(__file__)
         self.icon_size = size
         self.distro = distro
         self.arch = arch
@@ -123,7 +123,7 @@ class WeatherIcon(gtk.Image):
         self.icon_size = size
 
     def set_imageicon(self, pngname):
-        filename = self.config.get_in_pix_path(pngname)
+        filename = globalconfig.get_in_pix_path(pngname)
         temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, self.icon_size, self.icon_size)
         logging.debug("setting image file: %s" % filename)
         self.set_from_pixbuf(temp)
@@ -177,7 +177,7 @@ class WeatherIcon(gtk.Image):
         dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
         dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
         dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
-        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_pix_path('pydebweather.png'))
+        logo = gtk.gdk.pixbuf_new_from_file(globalconfig.get_in_pix_path('pydebweather.png'))
         dlg_about.set_logo(logo)
         dlg_about.run()
         dlg_about.destroy()
