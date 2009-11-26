@@ -21,13 +21,13 @@ class Paths:
         logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
         return self.PIX_PATH
 
-    def get_in_pix_path(self, file):
-        logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
-        return os.path.join(self.PIX_PATH,file)
-
     def get_data_path(self):
         logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return self.DATA_PATH
+
+    def get_in_pix_path(self, file):
+        logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
+        return os.path.join(self.PIX_PATH,file)
 
     def get_in_data_path(self, file):
         logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
