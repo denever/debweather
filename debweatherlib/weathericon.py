@@ -111,7 +111,7 @@ class WeatherIcon(gtk.Image):
         dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
         dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
         dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
-        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_pix_path('pydebweather.png'))
+        logo = gtk.gdk.pixbuf_new_from_file(self.paths.get_in_pix_path('pydebweather.png'))
         dlg_about.set_logo(logo)
         dlg_about.run()
         dlg_about.destroy()
