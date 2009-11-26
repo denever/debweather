@@ -33,6 +33,7 @@
                     <child>
                       <object class="GtkComboBox" id="cmb_distro">
                         <property name="visible">True</property>
+                        <property name="model">liststore1</property>
                         <signal name="changed" handler="on_cmb_distro_changed"/>
                       </object>
                     </child>
@@ -62,6 +63,7 @@
                     <child>
                       <object class="GtkComboBox" id="cmb_arch">
                         <property name="visible">True</property>
+                        <property name="model">liststore2</property>
                         <signal name="changed" handler="on_cmb_arch_changed"/>
                       </object>
                     </child>
@@ -132,4 +134,6 @@
       <action-widget response="0">btn_cancel</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkListStore" id="liststore1"/>
+  <object class="GtkListStore" id="liststore2"/>
 </interface>
