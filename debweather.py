@@ -41,7 +41,6 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='/home/denever/applet.log',
                     filemode='w')
-
 class Config:
     def __init__(self, mainfile):
         self.APP_PATH = os.path.dirname(mainfile)
@@ -73,11 +72,15 @@ class Config:
         logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return os.path.join(self.DATA_PATH,file)
 
+
 class WeatherIcon(gtk.Image):
     def __init__(self, size, distro, arch):
+        logging.debug("WeatherIcon.__init__")
         gtk.Image.__init__(self)
         self.config = Config(__file__)
         self.icon_size = size
+        self.distro = distro
+        self.arch = arch
         self.weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (distro, arch)
         self.description = 'unknown'
         self.total = 'unknown'
@@ -198,9 +201,13 @@ def create_menu(applet, verbs):
 def sample_factory(applet, iid):
     logging.debug("Creating new applet instance")
     wi = WeatherIcon(applet.get_size(), 'unstable','i386')
+    logging.debug("Created wi")
     applet.add(wi)
+    logging.debug("Added wi")
     applet.show_all()
+    logging.debug("Showed wi")
     wi.update()
+    logging.debug("Updated wi")
     verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs)]
     create_menu(applet, verbs)
     applet.connect('destroy', wi.cleanup)
