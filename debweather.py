@@ -41,6 +41,7 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='/home/denever/applet.log',
                     filemode='w')
+
 class Config:
     def __init__(self, mainfile):
         self.APP_PATH = os.path.dirname(mainfile)
@@ -55,7 +56,7 @@ class Config:
 
     def get_app_path(self):
         return self.APP_PATH
-    
+
     def get_pix_path(self):
         logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
         return self.PIX_PATH
@@ -63,7 +64,7 @@ class Config:
     def get_in_pix_path(self, file):
         logging.debug("self.PIX_PATH: %s" % self.PIX_PATH)
         return os.path.join(self.PIX_PATH,file)
-    
+
     def get_data_path(self):
         logging.debug("self.DATA_PATH: %s" % self.DATA_PATH)
         return self.DATA_PATH
@@ -73,6 +74,34 @@ class Config:
         return os.path.join(self.DATA_PATH,file)
 
 globalconfig = Config(__file__)
+
+class PreferencesBox:
+    dialog = None
+    cmb_distro = None
+    cmb_arch = None
+
+    def __init__(self):
+        self.gui = gtk.Builder()
+        self.gui.add_from_file(globalconfig.get_in_data_path('prefbox.glade'))
+        self.dialog = gui.get_object('prefs')
+        self.cmb_distro = gui.get_object('cmb_distro')
+        self.cmb_arch = gui.get_object('cmb_arch')
+        self.gui.connect_signals(self)
+
+    def show(self):
+        self.dialog.show()
+
+    def on_cmb_distro_changed(self):
+        logging.debug("Distro changed")
+
+    def on_cmb_arch_changed(self):
+        logging.debug("Arch changed")
+
+    def on_btn_apply(self):
+        logging.debug("Apply")
+
+    def on_btn_cancel(self):
+        logging.debug("Cancel")
 
 class WeatherIcon(gtk.Image):
     def __init__(self, size, distro, arch):
