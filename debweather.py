@@ -89,6 +89,8 @@ class WeatherIcon(gtk.Image):
                            '3': self.set_overcast,
                            '4': self.set_shower,
                            '5': self.set_storm}
+    def cleanup(self):
+        logging.debug('cleanup')
 
     def set_unavailable(self):
         self.set_imageicon('pydebweather.png')
@@ -201,9 +203,10 @@ def sample_factory(applet, iid):
     wi.update()
     verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs)]
     create_menu(applet, verbs)
+    applet.connect('destroy', wi.cleanup)
     gobject.timeout_add(1000, background_show, applet)
     gobject.timeout_add_seconds(60, wi.update)
-    logging.debug("Returning true")
+    logging.debug("Ending sample factory")
     return True
 
 print "Starting factory"
