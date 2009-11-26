@@ -1,13 +1,17 @@
+import logging
+
 import pygtk
 pygtk.require('2.0')
 
 import gtk
-import logging
+import httplib
+from xml.etree.ElementTree import XML
 
 class WeatherIcon(gtk.Image):
-    def __init__(self, size, distro, arch):
+    def __init__(self, paths, size, distro, arch):
         logging.debug("WeatherIcon.__init__")
         gtk.Image.__init__(self)
+        self.paths = paths
         self.icon_size = size
         self.distro = distro
         self.arch = arch
@@ -53,7 +57,7 @@ class WeatherIcon(gtk.Image):
         self.icon_size = size
 
     def set_imageicon(self, pngname):
-        filename = globalconfig.get_in_pix_path(pngname)
+        filename = self.paths.get_in_pix_path(pngname)
         temp = gtk.gdk.pixbuf_new_from_file_at_size(filename, self.icon_size, self.icon_size)
         logging.debug("setting image file: %s" % filename)
         self.set_from_pixbuf(temp)
@@ -107,7 +111,7 @@ class WeatherIcon(gtk.Image):
         dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
         dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
         dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
-        logo = gtk.gdk.pixbuf_new_from_file(globalconfig.get_in_pix_path('pydebweather.png'))
+        logo = gtk.gdk.pixbuf_new_from_file(self.config.get_in_pix_path('pydebweather.png'))
         dlg_about.set_logo(logo)
         dlg_about.run()
         dlg_about.destroy()
