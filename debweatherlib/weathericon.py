@@ -1,3 +1,9 @@
+import pygtk
+pygtk.require('2.0')
+
+import gtk
+import logging
+
 class WeatherIcon(gtk.Image):
     def __init__(self, size, distro, arch):
         logging.debug("WeatherIcon.__init__")
