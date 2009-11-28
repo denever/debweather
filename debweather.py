@@ -36,6 +36,7 @@ pygtk.require('2.0')
 import gtk
 import gnomeapplet
 import gobject
+import gconf
 
 from debweatherlib import Paths
 from debweatherlib import WeatherIcon
@@ -47,7 +48,17 @@ def background_show(applet):
 
 def sample_factory(applet, iid):
     logging.debug("Creating new applet instance")
-    wi = WeatherIcon(globalpaths, applet.get_size(), 'unstable','i386')
+    conf_client = gconf.client_get_default()    
+    distro = str()
+    arch = str()
+    if not conf_client.dir_exists('/apps/pydebweather'):
+       distro = 'unstable'
+       arch = 'i386'
+    else:
+        distro = conf_client.get_string('/apps/pydebweather/distro')
+        arch = conf_client.get_string('/apps/pydebweather/arch')
+
+    wi = WeatherIcon(globalpaths, applet.get_size(), distro, arch)
     logging.debug("Created wi")
     applet.add(wi)
     logging.debug("Added wi")
