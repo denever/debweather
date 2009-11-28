@@ -6,6 +6,7 @@ pygtk.require('2.0')
 import gtk
 import httplib
 from xml.etree.ElementTree import XML
+from preferencesbox import PreferencesBox
 
 class WeatherIcon(gtk.Image):
     def __init__(self, paths, size, distro, arch):
@@ -118,4 +119,6 @@ class WeatherIcon(gtk.Image):
 
     def show_prefs(self, obj, label, *data):
         logging.debug("Show preferences")
-
+        pb = PreferencesBox(self.paths, self.distro, self.arch)
+        pb.show()
+        logging.debug("Showed preferences")
