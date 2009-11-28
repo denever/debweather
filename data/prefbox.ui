@@ -60,6 +60,7 @@
                 <child>
                   <object class="GtkComboBox" id="cmb_arch">
                     <property name="visible">True</property>
+                    <property name="model">lst_archs</property>
                     <signal name="changed" handler="on_cmb_arch_changed"/>
                   </object>
                 </child>
@@ -142,4 +143,5 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="lst_archs"/>
 </interface>
