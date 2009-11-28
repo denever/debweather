@@ -6,39 +6,51 @@ import gtk
 import gconf
 
 class PreferencesBox:
-    distros = ['stable','testing','unstable']
     archs = {
         'stable':['alpha','amd64','arm','hppa','i386','ia64','mips','mipsel','powerpc','s390','sparc'],
         'testing':['alpha','amd64','arm','armel','hppa','i386','ia64','mips','mipsel','powerpc','s390','sparc'],
         'unstable':['alpha','amd64','arm','armel','hppa','hurd-i386','i386','ia64','m68k','mips','mipsel','powerpc','s390','sparc']}
-    dialog = None
-    cmb_distro = None
-    cmb_arch = None
 
     def __init__(self, paths, current_distro, current_arch):
         self.gui = gtk.Builder()
-        self.gui.add_from_file(paths.get_in_data_path('prefbox.glade'))
-        self.dialog = self.gui.get_object('prefs')
+        self.gui.add_from_file(paths.get_in_data_path('prefbox.ui'))
+        self.dlg_prefs = self.gui.get_object('dlg_prefs')
         self.cmb_distro = self.gui.get_object('cmb_distro')
         self.cmb_arch = self.gui.get_object('cmb_arch')
-        self.cmb_distro.set_model(gtk.ListStore(str))
-        self.cmb_arch.set_model(gtk.ListStore(str))
+        self.lst_distros = self.cmb_distro.get_model()
+        self.lst_archs = self.cmb_arch.get_model()
+        distro_cell = gtk.CellRendererText()
+        arch_cell = gtk.CellRendererText()
+        self.cmb_distro.pack_start(distro_cell, True)
+        self.cmb_distro.add_attribute(distro_cell, 'text', 0) 
+        self.cmb_arch.pack_start(arch_cell, True)
+        self.cmb_arch.add_attribute(arch_cell, 'text', 0) 
+
+        # self.cmb_distro.set_model(gtk.ListStore(str))
+        # self.cmb_arch.set_model(gtk.ListStore(str))
         self.gui.connect_signals(self)
 
-        for i,distro in enumerate(self.distros):
-            self.cmb_distro.append_text(distro)
-            if distro == current_distro:
+        for i,d in enumerate(self.lst_distros):
+            if d[0] == current_distro:
                 self.cmb_distro.set_active(i)
 
         for i,arch in enumerate(self.archs[current_distro]):
-            self.cmb_arch.append_text(arch)
+            self.lst_archs.append([arch])
+            logging.debug('Appending arch: %s' % arch)
             if arch == current_arch:
                 self.cmb_arch.set_active(i)
 
+
     def show(self):
-        self.dialog.show()
+        self.dlg_prefs.show()
 
     def on_cmb_distro_changed(self, widget):
+        self.lst_archs.clear()
+        current_distro = self.lst_distros[self.cmb_distro.get_active()][0]
+        for i,arch in enumerate(self.archs[current_distro]):
+            self.lst_archs.append([arch])
+            logging.debug('Appending arch: %s' % arch)
+
         logging.debug("Distro changed")
 
     def on_cmb_arch_changed(self, widget):
@@ -53,8 +65,8 @@ class PreferencesBox:
             conf_client.set_string('/apps/pydebweather/distro', distro)
             conf_client.set_string('/apps/pydebweather/arch', arch)
 
-        self.dialog.hide()
+        self.dlg_prefs.hide()
 
     def on_btn_cancel_clicked(self, widget):
         logging.debug("Cancel")
-        self.dialog.hide()
+        self.dlg_prefs.hide()
