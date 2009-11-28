@@ -143,5 +143,10 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="lst_archs"/>
+  <object class="GtkListStore" id="lst_archs">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
 </interface>
