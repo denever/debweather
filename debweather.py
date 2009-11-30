@@ -66,7 +66,9 @@ def sample_factory(applet, iid):
     logging.debug("Showed wi")
     wi.update()
     logging.debug("Updated wi")
-    verbs = [('About', wi.show_about), ('Prefs', wi.show_prefs), ('More', wi.show_more)]
+    verbs = [('About', wi.show_about),
+             ('Prefs', wi.show_prefs),
+             ('More', wi.show_more)]
     menu_xml = open(globalpaths.get_in_data_path('menu.xml'),'r').read()
     applet.setup_menu(menu_xml, verbs, None)
     logging.debug("created menu")
