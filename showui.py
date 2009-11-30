@@ -15,8 +15,8 @@ logging.basicConfig(level=logging.DEBUG,
 
 def main():
     paths = Paths(__file__)
-    wb = WeatherBox(paths, 'unstable', 'i386', 'puppa', 'puppa', 'puppa')
-    wb.show()
+    wb = WeatherBox(paths)
+    wb.toggle()
     gtk.main()
 
 if __name__ == "__main__":
