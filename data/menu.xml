@@ -5,13 +5,13 @@
 	  pixtype="stock" 
 	  pixname="gtk-info"/>
 <separator/>
-<menuitem name="Item 1"
+<menuitem name="Item 2"
 	  verb="Prefs" 
 	  _label="_Preferences" 
 	  pixtype="stock" 
 	  pixname="gtk-preferences"/>
 <separator/>
-<menuitem name="Item 2" 
+<menuitem name="Item 3" 
 	  verb="About" 
 	  _label="_About" 
 	  pixtype="stock" 
