@@ -9,7 +9,7 @@ Homepage: http://github.com/denever/debweather
 
 Package: debweather
 Architecture: any
-Depends: python, python-gtk2
+Depends: ${python:Versions}, ${python:Depends}, python, python-gtk2
 XB-Python-Version: >= 2.5
 Description: Debian Weather Gnome Applet
  Debweather is an gnome applet that displays the status of a distribution as weather conditions.

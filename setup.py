@@ -8,6 +8,6 @@ setup(name='debweather',
       author=['Giuseppe Martino'],
       author_email=['denever@users.sf.net'],
       url='http://github.com/denever/debweather',
-      scripts=['debweather.py'],
+      scripts=['debweather'],
       packages=['debweatherlib']
      )
