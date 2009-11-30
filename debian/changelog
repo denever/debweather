@@ -1,0 +1,5 @@
+debweather (1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Giuseppe Martino (denever) <denever@users.sf.net>  Mon, 30 Nov 2009 16:13:06 +0100
