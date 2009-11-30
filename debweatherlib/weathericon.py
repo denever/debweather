@@ -44,11 +44,12 @@ class WeatherIcon(gtk.Image):
         self.icon_size = size
         self.distro = distro
         self.arch = arch
-        self.description = 'unknown'
-        self.total = 'unknown'
-        self.broken = 'unknown'
-        self.url = 'unknown'
         self.weather = 0
+        self.pb = PreferencesBox(self.paths, self.distro, self.arch)
+        logging.debug("Created PreferencesBox")
+        self.wb = WeatherBox(self.paths)
+        logging.debug("Created WeatherBox")
+        self.pb.connect('new-preferences', self.on_new_preferences)
         self.weather_select = { '1': self.set_clear,
                            '2': self.set_few_clouds,
                            '3': self.set_overcast,
@@ -112,18 +113,27 @@ class WeatherIcon(gtk.Image):
         try:
             logging.debug('Parsing XML')
             weather_xml = XML(data)
-            self.description = weather_xml.getiterator("description")[0].text
-            if self.description is None:
-                logging.debug("No Description")
-            logging.debug("Description: %s" % self.description)
+
+            description = weather_xml.getiterator("description")[0].text
+            self.wb.set_descr(description)
+            logging.debug("Description: %s" % description)
+
+            self.wb.set_arch(self.arch)
             self.weather = weather_xml.getiterator("index")[0].text
             logging.debug("Weather: %s" % self.weather)
-            self.total = weather_xml.getiterator('total')[0].text
-            logging.debug("Total: %s" % self.total)
-            self.broken = weather_xml.getiterator('broken')[0].text
-            logging.debug("Broken: %s" % self.broken)
-            self.url = weather_xml.getiterator('url')[0].text
-            logging.debug("URL: %s" % self.url)
+
+            total = weather_xml.getiterator('total')[0].text
+            self.wb.set_totpkg(total)
+            logging.debug("Total: %s" % total)
+
+            broken = weather_xml.getiterator('broken')[0].text
+            self.wb.set_broken(broken)
+            logging.debug("Broken: %s" % broken)
+
+            url = weather_xml.getiterator('url')[0].text
+            self.wb.set_url(url)
+            logging.debug("URL: %s" % url)
+
             self.weather_select[self.weather]()
             logging.debug("End parsing")
         except ExpatError:
@@ -148,9 +158,9 @@ class WeatherIcon(gtk.Image):
 
     def show_prefs(self, obj, label, *data):
         logging.debug("Show preferences")
-        pb = PreferencesBox(self.paths, self.distro, self.arch)
-        pb.connect('new-preferences', self.on_new_preferences)
-        pb.show()
+        self.pb.set_current_distro(self.distro)
+        self.pb.set_current_arch(self.arch)
+        self.pb.show()
         logging.debug("Showed preferences")
 
     def on_new_preferences(self, widget, distro, arch):
@@ -161,5 +171,10 @@ class WeatherIcon(gtk.Image):
 
     def show_more(self, obj, label, *data):
         logging.debug("Showing more")
-        wb = WeatherBox(self.paths, self.description, self.arch, self.total, self.broken, self.url)
-        wb.show()
+        self.wb.toggle()
+
+    def on_button_pressed(self, widget, event):
+        logging.debug("Button pressed")
+        logging.debug("button: %s" % event.button)
+        if event.button == 1:
+            self.wb.toggle()
