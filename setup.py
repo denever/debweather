@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='debweather',
-      version='0.1',
+      version='1.0',
       description='Debian Weather Applet',
       author=['Giuseppe Martino'],
       author_email=['denever@users.sf.net'],
