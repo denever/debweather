@@ -42,8 +42,10 @@ class PreferencesBox(gobject.GObject):
         'testing':['alpha','amd64','arm','armel','hppa','i386','ia64','mips','mipsel','powerpc','s390','sparc'],
         'unstable':['alpha','amd64','arm','armel','hppa','hurd-i386','i386','ia64','m68k','mips','mipsel','powerpc','s390','sparc']}
 
-    def __init__(self, paths, current_distro, current_arch):
+    def __init__(self, paths, distro, arch):
         gobject.GObject.__init__(self)
+        self.current_distro = distro
+        self.current_arch = arch
         self.gui = gtk.Builder()
         self.gui.add_from_file(paths.get_in_data_path('debweather.ui'))
         self.dlg_prefs = self.gui.get_object('dlg_prefs')
@@ -58,24 +60,26 @@ class PreferencesBox(gobject.GObject):
         self.cmb_distro.add_attribute(distro_cell, 'text', 0) 
         self.cmb_arch.pack_start(arch_cell, True)
         self.cmb_arch.add_attribute(arch_cell, 'text', 0) 
-
-        # self.cmb_distro.set_model(gtk.ListStore(str))
-        # self.cmb_arch.set_model(gtk.ListStore(str))
         self.gui.connect_signals(self)
 
+    def set_current_distro(self, distro):
+        self.current_distro = distro
+    
+    def set_current_arch(self, arch):
+        self.current_arch = arch
+
+    def show(self):
         for i,d in enumerate(self.lst_distros):
-            if d[0] == current_distro:
+            if d[0] == self.current_distro:
                 self.cmb_distro.set_active(i)
 
         self.lst_archs.clear()
-        for i,arch in enumerate(self.archs[current_distro]):
+        for i,arch in enumerate(self.archs[self.current_distro]):
             self.lst_archs.append([arch])
             logging.debug('Appending arch: %s' % arch)
-            if arch == current_arch:
+            if arch == self.current_arch:
                 self.cmb_arch.set_active(i)
         self.btn_apply.set_sensitive(False)
-
-    def show(self):
         self.dlg_prefs.show()
 
     def on_cmb_distro_changed(self, widget):
