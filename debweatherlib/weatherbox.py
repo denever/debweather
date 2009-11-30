@@ -45,6 +45,11 @@ class WeatherBox():
         self.lbl_totpkg.set_text('Total packages: %s' % totpkg)
         self.lbl_uninstpkg.set_text('Uninstallable packages: %s' % uninstpkg)
         self.lbt_more.set_uri(url)
-
+        self.gui.connect_signals(self)
+        
     def show(self):
         self.dlg_debweather.show()
+
+    def on_btn_ok_clicked(self):
+        self.dlg_debweather.hide()
+
