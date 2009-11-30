@@ -28,7 +28,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/home/denever/applet.log',
+                    filename='/tmp/debweather.log',
                     filemode='w')
 import pygtk
 pygtk.require('2.0')
