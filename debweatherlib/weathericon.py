@@ -30,9 +30,9 @@ class WeatherIcon(gtk.Image):
     def cleanup(self):
         logging.debug('cleanup')
 
-    def set_unavailable(self):
+    def set_unavailable(self, reason):
         self.set_imageicon('pydebweather.png')
-        self.set_tooltip_text('Service unavailable')
+        self.set_tooltip_text('Service unavailable %s' % reason)
 
     def set_clear(self):
         self.set_imageicon('clear.png')
@@ -79,9 +79,8 @@ class WeatherIcon(gtk.Image):
             logging.debug(str(r1.getheaders()))
             data = r1.read()
             logging.debug(data)
-        except e:
-            logging.error(str(e))
-            self.set_unavailable()
+        except httplib.HTTPException:
+            self.set_unavailable('HTTP error')
 
         try:
             logging.debug('Parsing XML')
@@ -101,7 +100,7 @@ class WeatherIcon(gtk.Image):
             self.weather_select[self.weather]()
             logging.debug("End parsing")
         except ExpatError:
-            self.set_unavailable()
+            self.set_unavailable('XML Parsing Error')
 
         return True
 
