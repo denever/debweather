@@ -31,7 +31,7 @@ pygtk.require('2.0')
 import gtk
 
 class WeatherBox():
-    def __init__(self, paths, distro, arch, totpkg, uninstpkg, url):
+    def __init__(self, paths):
         self.gui = gtk.Builder()
         self.gui.add_from_file(paths.get_in_data_path('debweather.ui'))
         self.dlg_debweather = self.gui.get_object('dlg_debweather')
@@ -40,16 +40,28 @@ class WeatherBox():
         self.lbl_totpkg = self.gui.get_object('lbl_totpkg')
         self.lbl_uninstpkg = self.gui.get_object('lbl_uninstpkg')
         self.lbt_more = self.gui.get_object('lbt_more')
-        self.lbl_distro.set_text('Distribution: %s' % distro)
-        self.lbl_arch.set_text('Architecture: %s' % arch)
-        self.lbl_totpkg.set_text('Total packages: %s' % totpkg)
-        self.lbl_uninstpkg.set_text('Uninstallable packages: %s' % uninstpkg)
-        self.lbt_more.set_uri(url)
         self.gui.connect_signals(self)
         
-    def show(self):
-        self.dlg_debweather.show()
+    def toggle(self):
+        if not self.dlg_debweather.get_property('visible'):
+            self.dlg_debweather.show()
+        else:
+            self.dlg_debweather.hide()
 
     def on_btn_ok_clicked(self, widget):
         self.dlg_debweather.hide()
+    
+    def set_descr(self, descr):
+        self.lbl_distro.set_text('Distribution: %s' % descr)
 
+    def set_arch(self, arch):
+        self.lbl_arch.set_text('Architecture: %s' % arch)
+
+    def set_totpkg(self, totpkg):
+        self.lbl_totpkg.set_text('Total packages: %s' % totpkg)
+
+    def set_broken(self, broken):
+        self.lbl_uninstpkg.set_text('Uninstallable packages: %s' % broken)
+
+    def set_url(self, url):
+        self.lbt_more.set_uri(url)
