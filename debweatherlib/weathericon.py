@@ -34,6 +34,7 @@ import httplib
 from xml.etree.ElementTree import XML
 from xml.parsers.expat import ExpatError
 from preferencesbox import PreferencesBox
+from weatherbox import WeatherBox
 
 class WeatherIcon(gtk.Image):
     def __init__(self, paths, size, distro, arch):
@@ -157,3 +158,8 @@ class WeatherIcon(gtk.Image):
         self.distro = distro
         self.arch = arch
         self.update()
+
+    def show_more(self, obj, label, *data):
+        logging.debug("Showing more")
+        wb = WeatherBox(self.paths, self.description, self.arch, self.total, self.broken, self.url)
+        wb.show()
