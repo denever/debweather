@@ -2,6 +2,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gconf
 import logging
 from debweatherlib import Paths
 from debweatherlib import PreferencesBox
@@ -18,7 +19,17 @@ def on_new_preferences(widget, distro, arch):
 
 def main():
     paths = Paths(__file__)
-    pb = PreferencesBox(paths, 'unstable','i386')
+    conf_client = gconf.client_get_default()    
+    distro = str()
+    arch = str()
+    if not conf_client.dir_exists('/apps/pydebweather'):
+       distro = 'unstable'
+       arch = 'i386'
+    else:
+        distro = conf_client.get_string('/apps/pydebweather/distro')
+        arch = conf_client.get_string('/apps/pydebweather/arch')
+
+    pb = PreferencesBox(paths, distro, arch)
     pb.show()
     pb.connect('new-preferences', on_new_preferences)
     gtk.main()
