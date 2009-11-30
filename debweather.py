@@ -73,6 +73,7 @@ def sample_factory(applet, iid):
     applet.setup_menu(menu_xml, verbs, None)
     logging.debug("created menu")
     applet.connect('destroy', wi.cleanup)
+    applet.connect('button-press-event', wi.on_button_pressed)
     gobject.timeout_add(1000, background_show, applet)
     gobject.timeout_add_seconds(60, wi.update)
     logging.debug("Ending sample factory")
