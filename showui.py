@@ -12,10 +12,15 @@ logging.basicConfig(level=logging.DEBUG,
                     filename='/home/denever/work/debweather/showui.log',
                     filemode='w')
 
+def on_new_preferences(widget, distro, arch):
+    print widget
+    print 'New preferences %s %s' % (distro, arch)
+
 def main():
     paths = Paths(__file__)
     pb = PreferencesBox(paths, 'unstable','i386')
     pb.show()
+    pb.connect('new-preferences', on_new_preferences)
     gtk.main()
 
 if __name__ == "__main__":
