@@ -32,8 +32,8 @@ class Paths:
         self.APP_PATH = os.path.dirname(mainfile)
         logging.debug("self.APP_PATH: %s" % self.APP_PATH)        
         if self.APP_PATH == '/usr/bin':
-            self.PIX_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/pydebweather')
-            self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pydebweather')
+            self.PIX_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/pixmaps/debweather')
+            self.DATA_PATH = os.path.join(os.path.dirname(self.APP_PATH), 'share/debweather')
         else:
             self.PIX_PATH=os.path.join(self.APP_PATH, 'data/')
             self.DATA_PATH=os.path.join(self.APP_PATH, 'data/')
