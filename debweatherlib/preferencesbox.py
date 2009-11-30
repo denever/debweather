@@ -41,6 +41,7 @@ class PreferencesBox(gobject.GObject):
             if d[0] == current_distro:
                 self.cmb_distro.set_active(i)
 
+        self.lst_archs.clear()
         for i,arch in enumerate(self.archs[current_distro]):
             self.lst_archs.append([arch])
             logging.debug('Appending arch: %s' % arch)
