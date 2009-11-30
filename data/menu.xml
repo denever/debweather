@@ -1,5 +1,11 @@
 <popup name="button3">
 <menuitem name="Item 1"
+	  verb="More" 
+	  _label="_More" 
+	  pixtype="stock" 
+	  pixname="gtk-info"/>
+<separator/>
+<menuitem name="Item 1"
 	  verb="Prefs" 
 	  _label="_Preferences" 
 	  pixtype="stock" 
