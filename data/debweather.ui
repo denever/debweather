@@ -155,7 +155,7 @@
   <object class="GtkDialog" id="dlg_debweather">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Debian Weather</property>
-    <property name="icon">pydebweather.png</property>
+    <property name="icon_name">dialog-information</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
