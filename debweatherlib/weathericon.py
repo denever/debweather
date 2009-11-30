@@ -6,6 +6,7 @@ pygtk.require('2.0')
 import gtk
 import httplib
 from xml.etree.ElementTree import XML
+from xml.parsers.expat import ExpatError
 from preferencesbox import PreferencesBox
 
 class WeatherIcon(gtk.Image):
@@ -75,7 +76,7 @@ class WeatherIcon(gtk.Image):
             conn.request("GET", weather_url)
             logging.debug("Getting response...")
             r1 = conn.getresponse()
-            logging.debug(str(r1))
+            logging.debug(str(r1.getheaders()))
             data = r1.read()
             logging.debug(data)
         except e:
@@ -83,22 +84,24 @@ class WeatherIcon(gtk.Image):
             self.set_unavailable()
 
         try:
+            logging.debug('Parsing XML')
             weather_xml = XML(data)
             self.description = weather_xml.getiterator("description")[0].text
+            if self.description is None:
+                logging.debug("No Description")
+            logging.debug("Description: %s" % self.description)
             self.weather = weather_xml.getiterator("index")[0].text
+            logging.debug("Weather: %s" % self.weather)
             self.total = weather_xml.getiterator('total')[0].text
+            logging.debug("Total: %s" % self.total)
             self.broken = weather_xml.getiterator('broken')[0].text
+            logging.debug("Broken: %s" % self.broken)
             self.url = weather_xml.getiterator('url')[0].text
-        except e:
-            logging.error(str(e))
+            logging.debug("URL: %s" % self.url)
+            self.weather_select[self.weather]()
+            logging.debug("End parsing")
+        except ExpatError:
             self.set_unavailable()
-
-        # logging.debug(self.description)
-        # logging.debug(self.weather)
-        # logging.debug(self.total)
-        # logging.debug(self.broken)
-        # logging.debug(self.url)
-        self.weather_select[self.weather]()
 
         return True
 
