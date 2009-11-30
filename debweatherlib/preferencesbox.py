@@ -19,7 +19,7 @@ class PreferencesBox(gobject.GObject):
     def __init__(self, paths, current_distro, current_arch):
         gobject.GObject.__init__(self)
         self.gui = gtk.Builder()
-        self.gui.add_from_file(paths.get_in_data_path('prefbox.ui'))
+        self.gui.add_from_file(paths.get_in_data_path('debweather.ui'))
         self.dlg_prefs = self.gui.get_object('dlg_prefs')
         self.btn_apply = self.gui.get_object('btn_apply')
         self.cmb_distro = self.gui.get_object('cmb_distro')
