@@ -16,7 +16,6 @@ class WeatherIcon(gtk.Image):
         self.icon_size = size
         self.distro = distro
         self.arch = arch
-        self.weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (distro, arch)
         self.description = 'unknown'
         self.total = 'unknown'
         self.broken = 'unknown'
@@ -65,14 +64,15 @@ class WeatherIcon(gtk.Image):
 
     def update(self):
         logging.debug("Calling weather update")
-        logging.debug(self.weather_url)
+        weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (self.distro, self.arch)
+        logging.debug(weather_url)
 
         data = str()
         try:
             logging.debug("Connecting to edos.debian.net...")
             conn = httplib.HTTPConnection("edos.debian.net")
             logging.debug("Getting weather_url...")
-            conn.request("GET", self.weather_url)
+            conn.request("GET", weather_url)
             logging.debug("Getting response...")
             r1 = conn.getresponse()
             logging.debug(str(r1))
@@ -120,5 +120,12 @@ class WeatherIcon(gtk.Image):
     def show_prefs(self, obj, label, *data):
         logging.debug("Show preferences")
         pb = PreferencesBox(self.paths, self.distro, self.arch)
+        pb.connect('new-preferences', self.on_new_preferences)
         pb.show()
         logging.debug("Showed preferences")
+
+    def on_new_preferences(self, widget, distro, arch):
+        logging.debug("New preferences %s %s" % (distro, arch))
+        self.distro = distro
+        self.arch = arch
+        self.update()
