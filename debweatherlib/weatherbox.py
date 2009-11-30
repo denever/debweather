@@ -50,6 +50,6 @@ class WeatherBox():
     def show(self):
         self.dlg_debweather.show()
 
-    def on_btn_ok_clicked(self):
+    def on_btn_ok_clicked(self, widget):
         self.dlg_debweather.hide()
 
