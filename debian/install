@@ -7,5 +7,5 @@ data/storm.png			 /usr/share/pixmaps/debweather
 data/showers-scattered.png		 /usr/share/pixmaps/debweather
 data/debweather.ui			 /usr/share/debweather
 data/menu.xml			 /usr/share/debweather
-data/show-preferences.py		 /usr/share/debweather
+show-preferences.py		 /usr/share/debweather
 
