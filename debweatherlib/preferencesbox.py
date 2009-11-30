@@ -46,6 +46,7 @@ class PreferencesBox(gobject.GObject):
             logging.debug('Appending arch: %s' % arch)
             if arch == current_arch:
                 self.cmb_arch.set_active(i)
+        self.btn_apply.set_sensitive(False)
 
     def show(self):
         self.dlg_prefs.show()
@@ -57,10 +58,12 @@ class PreferencesBox(gobject.GObject):
             self.lst_archs.append([arch])
             logging.debug('Appending arch: %s' % arch)
 
+        self.btn_apply.set_sensitive(False)
         logging.debug("Distro changed")
 
     def on_cmb_arch_changed(self, widget):
         logging.debug("Arch changed")
+        self.btn_apply.set_sensitive(True)
 
     def on_btn_apply_clicked(self, widget):
         logging.debug("Apply")
