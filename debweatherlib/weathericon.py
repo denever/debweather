@@ -37,11 +37,9 @@ from preferencesbox import PreferencesBox
 from weatherbox import WeatherBox
 
 class WeatherIcon(gtk.Image):
-    tooltip_template = """
-Debian Weather: %s
+    tooltip_template = """Debian Weather: %s
 Arch: %s
-Uninstallable: %d/%d (%d %)
-"""
+Uninstallable: %s/%s (%d)"""
     def __init__(self, paths, size, distro, arch):
         logging.debug("WeatherIcon.__init__")
         gtk.Image.__init__(self)
@@ -67,25 +65,25 @@ Uninstallable: %d/%d (%d %)
         self.set_imageicon('debweather.png')
         self.set_tooltip_text('Service unavailable %s' % reason)
 
-    def set_clear(self, broken, total):
+    def set_clear(self, broken, total, percent):
         self.set_imageicon('clear.png')
-        self.set_tooltip_text(tooltip_template % ('Clear', self.arch, broken, total, broken/total))
+        self.set_tooltip_text(self.tooltip_template % ('Clear', self.arch, broken, total, percent))
 
-    def set_few_clouds(self, broken, total):
+    def set_few_clouds(self, broken, total, percent):
         self.set_imageicon('few-clouds.png')
-        self.set_tooltip_text(tooltip_template % ('Few clouds', self.arch, broken, total, broken/total))
+        self.set_tooltip_text(self.tooltip_template % ('Few clouds', self.arch, broken, total, percent))
 
-    def set_overcast(self, broken, total):
+    def set_overcast(self, broken, total, percent):
         self.set_imageicon('overcast.png')
-        self.set_tooltip_text(tooltip_template % ('Overcast', self.arch, broken, total, broken/total))
+        self.set_tooltip_text(self.tooltip_template % ('Overcast', self.arch, broken, total, percent))
 
-    def set_shower(self, broken, total):
+    def set_shower(self, broken, total, percent):
         self.set_imageicon('shower.png')
-        self.set_tooltip_text(tooltip_template % ('Shower scattered', self.arch, broken, total, broken/total))
+        self.set_tooltip_text(self.tooltip_template % ('Shower scattered', self.arch, broken, total, percent))
 
-    def set_storm(self, broken, total):
+    def set_storm(self, broken, total, percent):
         self.set_imageicon('storm.png')
-        self.set_tooltip_text(tooltip_template % ('Storm', self.arch, broken, total, broken/total))
+        self.set_tooltip_text(self.tooltip_template % ('Storm', self.arch, broken, total, percent))
 
     def set_icon_size(self, size):
         self.icon_size = size
@@ -138,8 +136,8 @@ Uninstallable: %d/%d (%d %)
             url = weather_xml.getiterator('url')[0].text
             self.wb.set_url(url)
             logging.debug("URL: %s" % url)
-
-            self.weather_select[self.weather](broken, total)
+            percent = (float(broken)/float(total))*100
+            self.weather_select[self.weather](broken, total, percent)
             logging.debug("End parsing")
         except ExpatError:
             self.set_unavailable('XML Parsing Error')
