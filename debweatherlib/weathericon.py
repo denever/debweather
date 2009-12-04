@@ -37,6 +37,11 @@ from preferencesbox import PreferencesBox
 from weatherbox import WeatherBox
 
 class WeatherIcon(gtk.Image):
+    tooltip_template = """
+Debian Weather: %s
+Arch: %s
+Uninstallable: %d/%d (%d %)
+"""
     def __init__(self, paths, size, distro, arch):
         logging.debug("WeatherIcon.__init__")
         gtk.Image.__init__(self)
@@ -62,25 +67,25 @@ class WeatherIcon(gtk.Image):
         self.set_imageicon('debweather.png')
         self.set_tooltip_text('Service unavailable %s' % reason)
 
-    def set_clear(self):
+    def set_clear(self, broken, total):
         self.set_imageicon('clear.png')
-        self.set_tooltip_text("Debian Weather: Clear")
+        self.set_tooltip_text(tooltip_template % ('Clear', self.arch, broken, total, broken/total))
 
-    def set_few_clouds(self):
+    def set_few_clouds(self, broken, total):
         self.set_imageicon('few-clouds.png')
-        self.set_tooltip_text("Debian Weather: Few clouds")
+        self.set_tooltip_text(tooltip_template % ('Few clouds', self.arch, broken, total, broken/total))
 
-    def set_overcast(self):
+    def set_overcast(self, broken, total):
         self.set_imageicon('overcast.png')
-        self.set_tooltip_text("Debian Weather: Overcast")
+        self.set_tooltip_text(tooltip_template % ('Overcast', self.arch, broken, total, broken/total))
 
-    def set_shower(self):
+    def set_shower(self, broken, total):
         self.set_imageicon('shower.png')
-        self.set_tooltip_text("Debian Weather: Shower scattered")
+        self.set_tooltip_text(tooltip_template % ('Shower scattered', self.arch, broken, total, broken/total))
 
-    def set_storm(self):
+    def set_storm(self, broken, total):
         self.set_imageicon('storm.png')
-        self.set_tooltip_text("Debian Weather: Storm")
+        self.set_tooltip_text(tooltip_template % ('Storm', self.arch, broken, total, broken/total))
 
     def set_icon_size(self, size):
         self.icon_size = size
@@ -134,7 +139,7 @@ class WeatherIcon(gtk.Image):
             self.wb.set_url(url)
             logging.debug("URL: %s" % url)
 
-            self.weather_select[self.weather]()
+            self.weather_select[self.weather](broken, total)
             logging.debug("End parsing")
         except ExpatError:
             self.set_unavailable('XML Parsing Error')
