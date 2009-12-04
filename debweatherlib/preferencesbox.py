@@ -101,9 +101,9 @@ class PreferencesBox(gobject.GObject):
         distro = self.cmb_distro.get_active_text()
         arch = self.cmb_arch.get_active_text()
         conf_client = gconf.client_get_default()
-        if conf_client.dir_exists('/apps/pydebweather'):
-            conf_client.set_string('/apps/pydebweather/distro', distro)
-            conf_client.set_string('/apps/pydebweather/arch', arch)
+        if conf_client.dir_exists('/apps/debian-weather-applet'):
+            conf_client.set_string('/apps/debian-weather-applet/distro', distro)
+            conf_client.set_string('/apps/debian-weather-applet/arch', arch)
         self.emit('new-preferences', distro, arch)
         self.dlg_prefs.hide()
 
