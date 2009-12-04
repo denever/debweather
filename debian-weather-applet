@@ -37,6 +37,7 @@ import gtk
 import gnomeapplet
 import gobject
 import gconf
+import popen2
 
 from debweatherlib import Paths
 from debweatherlib import WeatherIcon
@@ -51,12 +52,14 @@ def sample_factory(applet, iid):
     conf_client = gconf.client_get_default()    
     distro = str()
     arch = str()
-    if not conf_client.dir_exists('/apps/pydebweather'):
-       distro = 'unstable'
-       arch = 'i386'
+    if not conf_client.dir_exists('/apps/debian-weather-applet'):
+        conf_client.add_dir('/apps/debian-weather-applet')
+        distro = 'unstable'
+        stdout, stdin = popen2.popen2('dpkg --print-architecture')
+        arch = stdout.readline().strip()
     else:
-        distro = conf_client.get_string('/apps/pydebweather/distro')
-        arch = conf_client.get_string('/apps/pydebweather/arch')
+        distro = conf_client.get_string('/apps/debian-weather-applet/distro')
+        arch = conf_client.get_string('/apps/debian-weather-applet/arch')
 
     wi = WeatherIcon(globalpaths, applet.get_size(), distro, arch)
     logging.debug("Created wi")
