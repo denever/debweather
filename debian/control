@@ -1,16 +1,16 @@
-Source: debweather
+Source: debian-weather-applet
 Section: gnome
 Priority: extra
 Maintainer: Giuseppe Martino (denever) <denever@autistici.org>
 Build-Depends: cdbs, debhelper (>= 7), python, python-central
 Standards-Version: 3.8.3
 XS-Python-Version: >= 2.5
-Homepage: http://github.com/denever/debweather
+Homepage: http://github.com/denever/debian-weather-applet
 
-Package: debweather
+Package: debian-weather-applet
 Architecture: any
 Depends: ${misc:Depends}, ${python:Depends}, python-gtk2, python-gobject, python-gconf, python-celementtree
 XB-Python-Version: >= 2.5
 Description: Debian Weather GNOME Applet
- Debweather is an GNOME applet that displays the status of a distribution
+ Debian-Weather-Applet is an GNOME applet that displays the status of a distribution
  as weather conditions. It's based on edos.debian.net.

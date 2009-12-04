@@ -1,11 +1,11 @@
 GNOME_DebianWeatherApplet.server /usr/lib/bonobo/servers/
-data/clear.png			 /usr/share/pixmaps/debweather
-data/few-clouds.png			 /usr/share/pixmaps/debweather
-data/overcast.png			 /usr/share/pixmaps/debweather
-data/debweather.png		 /usr/share/pixmaps/debweather
-data/storm.png			 /usr/share/pixmaps/debweather
-data/showers-scattered.png		 /usr/share/pixmaps/debweather
-data/debweather.ui			 /usr/share/debweather
-data/menu.xml			 /usr/share/debweather
-show-preferences.py		 /usr/share/debweather
+data/clear.png			 /usr/share/pixmaps/debian-weather-applet
+data/few-clouds.png		 /usr/share/pixmaps/debian-weather-applet
+data/overcast.png		 /usr/share/pixmaps/debian-weather-applet
+data/debweather.png		 /usr/share/pixmaps/debian-weather-applet
+data/storm.png			 /usr/share/pixmaps/debian-weather-applet
+data/showers-scattered.png	 /usr/share/pixmaps/debian-weather-applet
+data/debweather.ui		 /usr/share/debian-weather-applet
+data/menu.xml			 /usr/share/debian-weather-applet
+show-preferences.py		 /usr/share/debian-weather-applet
 
