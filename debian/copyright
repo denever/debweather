@@ -1,6 +1,6 @@
 This work was packaged for Debian by:
 
-    Giuseppe Martino (denever) <denever@users.sf.net> on Mon, 30 Nov 2009 16:13:06 +0100
+    Giuseppe Martino (denever) <denever@autistici.org> on Mon, 30 Nov 2009 16:13:06 +0100
 
 It was downloaded from:
 
@@ -8,7 +8,7 @@ It was downloaded from:
 
 Upstream Author(s):
 
-    Giuseppe Martino (denever) <denever@users.sf.net>
+    Giuseppe Martino (denever) <denever@autistici.org>
 
 Copyright:
 
@@ -35,7 +35,7 @@ Public License version 2 can be found in `/usr/share/common-licenses/GPL-2'.
 
 The Debian packaging is:
 
-    Copyright (C) 2009 Giuseppe Martino (denever) <denever@users.sf.net>
+    Copyright (C) 2009 Giuseppe Martino (denever) <denever@autistici.org>
 
 you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
