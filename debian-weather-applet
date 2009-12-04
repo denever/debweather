@@ -53,7 +53,7 @@ def sample_factory(applet, iid):
     distro = str()
     arch = str()
     if not conf_client.dir_exists('/apps/debian-weather-applet'):
-        conf_client.add_dir('/apps/debian-weather-applet')
+        conf_client.add_dir('/apps/debian-weather-applet', gconf.CLIENT_PRELOAD_NONE)
         distro = 'unstable'
         stdout, stdin = popen2.popen2('dpkg --print-architecture')
         arch = stdout.readline().strip()
