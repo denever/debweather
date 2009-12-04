@@ -59,7 +59,7 @@ class WeatherIcon(gtk.Image):
         logging.debug('cleanup')
 
     def set_unavailable(self, reason):
-        self.set_imageicon('pydebweather.png')
+        self.set_imageicon('debweather.png')
         self.set_tooltip_text('Service unavailable %s' % reason)
 
     def set_clear(self):
@@ -151,7 +151,7 @@ class WeatherIcon(gtk.Image):
         dlg_about.set_copyright('\xC2\xA9 2008-2009 Giuseppe "denever" Martino')
         dlg_about.set_license('This program is licenced under GNU General Public Licence (GPL) version 2.')
         dlg_about.set_authors(['Giuseppe "denever" Martino <martinogiuseppe@gmail.com>'])
-        logo = gtk.gdk.pixbuf_new_from_file(self.paths.get_in_pix_path('pydebweather.png'))
+        logo = gtk.gdk.pixbuf_new_from_file(self.paths.get_in_pix_path('debweather.png'))
         dlg_about.set_logo(logo)
         dlg_about.run()
         dlg_about.destroy()
