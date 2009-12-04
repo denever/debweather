@@ -84,4 +84,3 @@ gnomeapplet.bonobo_factory("OAFIID:GNOME_DebianWeatherApplet_Factory",
                            gnomeapplet.Applet.__gtype__,
                            "hello", "0", sample_factory)
 print "Factory ended"
-# pydebweather.png in /usr/share/pixmaps
