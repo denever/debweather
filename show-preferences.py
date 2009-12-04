@@ -29,13 +29,14 @@ pygtk.require('2.0')
 import gtk
 import gconf
 import logging
+import popen2
 from debweatherlib import Paths
 from debweatherlib import PreferencesBox
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/home/denever/work/debweather/showui.log',
+                    filename='/tmp/showui.log',
                     filemode='w')
 
 def on_new_preferences(widget, distro, arch):
@@ -47,12 +48,16 @@ def main():
     conf_client = gconf.client_get_default()    
     distro = str()
     arch = str()
-    if not conf_client.dir_exists('/apps/pydebweather'):
-       distro = 'unstable'
-       arch = 'i386'
+    if not conf_client.dir_exists('/apps/debian-weather-applet'):
+        debian_version = open('/etc/debian_version','r').readline().strip()
+        print debian_version
+        stdout, stdin = popen2.popen2('dpkg --print-architecture')
+        arch = stdout.readline().strip()
+        print arch
+        distro = 'unstable'
     else:
-        distro = conf_client.get_string('/apps/pydebweather/distro')
-        arch = conf_client.get_string('/apps/pydebweather/arch')
+        distro = conf_client.get_string('/apps/debian-weather-applet/distro')
+        arch = conf_client.get_string('/apps/debian-weather-applet/arch')
 
     pb = PreferencesBox(paths, distro, arch)
     pb.show()
