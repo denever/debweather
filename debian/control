@@ -13,5 +13,5 @@ Depends: ${misc:Depends}, ${python:Depends}, python-gtk2, python-gobject, python
 XB-Python-Version: >= 2.5
 Description: Debian Weather GNOME Applet
  Debian-Weather-Applet is an GNOME applet that displays
- the status of a debian distribution as weather conditions.
+ the status of a Debian distribution as weather conditions.
  It's based on edos.debian.net.
