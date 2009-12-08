@@ -1,5 +1,5 @@
 debian-weather-applet (2.0-1) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release
 
  -- Giuseppe Martino (denever) <denever@autistici.org>  Mon, 30 Nov 2009 16:13:06 +0100
