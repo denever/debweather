@@ -8,7 +8,7 @@ XS-Python-Version: >= 2.5
 Homepage: http://github.com/denever/debian-weather-applet
 
 Package: debian-weather-applet
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, python-gtk2, python-gobject, python-gconf, python-celementtree
 XB-Python-Version: >= 2.5
 Description: Debian Weather GNOME Applet
