@@ -30,7 +30,7 @@ import pygtk
 pygtk.require('2.0')
 
 import gtk
-import httplib
+import urllib2
 from xml.etree.ElementTree import XML
 from xml.parsers.expat import ExpatError
 from preferencesbox import PreferencesBox
@@ -96,23 +96,24 @@ Uninstallable: %s/%s (%d)"""
 
     def update(self):
         logging.debug("Calling weather update")
-        weather_url = "/edos-debcheck/results/%s/latest/%s/weather.xml" % (self.distro, self.arch)
+        weather_url = "http://edos.debian.net/edos-debcheck/results/%s/latest/%s/weather.xml" % (self.distro, self.arch)
         logging.debug(weather_url)
 
         data = str()
         try:
-            logging.debug("Connecting to edos.debian.net...")
-            conn = httplib.HTTPConnection("edos.debian.net")
+            logging.debug("Connecting to...")
+            logging.debug(weather_url)
+            r1 = urllib2.urlopen(weather_url)
             logging.debug("Getting weather_url...")
-            conn.request("GET", weather_url)
             logging.debug("Getting response...")
-            r1 = conn.getresponse()
-            logging.debug(str(r1.getheaders()))
+            logging.debug(str(r1.headers))
             data = r1.read()
             logging.debug(data)
-        except httplib.HTTPException:
-            self.set_unavailable('HTTP error')
-
+        except urllib2.HTTPError, e:
+            logging.debug(str(e))
+            self.set_unavailable(str(e))
+            return False
+        
         try:
             logging.debug('Parsing XML')
             weather_xml = XML(data)
@@ -141,6 +142,7 @@ Uninstallable: %s/%s (%d)"""
             logging.debug("End parsing")
         except ExpatError:
             self.set_unavailable('XML Parsing Error')
+            return False
 
         return True
 
